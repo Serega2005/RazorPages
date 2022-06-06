@@ -1,0 +1,12 @@
+﻿@model ICatalog
+
+@{
+    ViewData["Title"] = "Вывод списка товаров";
+}
+
+@foreach (var p in Model.GetProducts())
+{
+    <a href="/Catalog/ProductInfo">
+        <div> @p.Id @p.Name @p.Price.ToString("C")</div>
+    </a>
+}

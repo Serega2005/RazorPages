@@ -1,0 +1,19 @@
+﻿@model ICatalog
+
+@{
+    ViewData["Title"] = "Добавление товара";
+}
+
+@foreach (var p in Model.GetProducts())
+{
+    <div> @p.Id @p.Name @p.Price.ToString("C")</div>
+}
+
+<form method="post">
+  <div>Id: <input type="text" name="id" required /></div>
+  <div>Имя: <input type="text" name="name" /></div>
+  <div>Цена: <input type="text" name="price" /></div>
+  
+  <div><input type="submit" name="submit" value="Создать"/></div>
+</form>
+

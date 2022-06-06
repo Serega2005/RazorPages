@@ -1,0 +1,25 @@
+﻿@model ICatalog
+
+@{
+    ViewData["Title"] = "Информация о товаре";
+}
+
+<form method="get">
+    @foreach (var p in Model.GetProducts())
+    {
+        <div>
+            <h5>
+                Id товара - @p.Id
+            </h5>
+            <div>
+                Имя - @p.Name
+            </div>
+            <div>
+                Цена - @p.Price.ToString("C")
+            </div>
+            <h5>
+            ---------------------------
+            </h5>
+        </div>
+    }
+</form>

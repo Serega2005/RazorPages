@@ -1,31 +1,44 @@
 ﻿using System.Net;
 using System.Net.Mail;
+using Microsoft.Extensions.Options;
 
 namespace WebApplication4.Models;
 
 public class SmtpEmailSender : IEmailSender
 {
-    private SmtpClient _smtpClient;
-
-    public SmtpEmailSender()
+    private readonly ILogger<SmtpEmailSender> _logger;
+    private SmtpCredentials _smtpCredentials;
+    
+    public SmtpEmailSender(IOptionsSnapshot<SmtpCredentials> options, ILogger<SmtpEmailSender> logger)
     {
-        _smtpClient = new SmtpClient("smtp.beget.com")
-        {
-            Port = 25,
-            Credentials = new NetworkCredential(
-                "asp2022_5@rodion-m.ru",
-                "J8S*U*b&"
-            ),
-        };
+        _logger = logger;
+        _smtpCredentials = options.Value;
     }
-
+    
     public void Send(string senderEmail, string title, string body, string recipient)
     {
-        _smtpClient.Send(
+        var smtpClient = new SmtpClient(_smtpCredentials.Host)
+        {
+            Port = _smtpCredentials.Port,
+            Credentials = new NetworkCredential(
+                _smtpCredentials.UserName,
+                _smtpCredentials.Password
+            ),
+        };
+    
+        smtpClient.Send(
             recipients: recipient,
             body: body,
             subject: title,
             from: senderEmail
         );
     }
+}
+
+public class SmtpCredentials
+{
+    public string? UserName { get; set; }
+    public string? Password { get; set; }
+    public string? Host { get; set; }
+    public int Port { get; set; }
 }

@@ -1,10 +1,14 @@
 using WebApplication4.BackgroundServices;
 using WebApplication4.Models;
+using WebApplication4.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.Configure<SmtpCredentials>(
+    builder.Configuration.GetSection("SmtpCredentials"));
+
+builder.Services.AddScoped<IEmailSender, SmtpEmailSender>();
 builder.Services.AddSingleton<ICatalog, InMemoryCatalog>();
-builder.Services.AddSingleton<IEmailSender, SmtpEmailSender>();
 builder.Services.AddHostedService<ServerStartingNotifier>();
 builder.Services.AddHostedService<ServerStatusNotifier>();
 

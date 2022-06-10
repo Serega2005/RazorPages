@@ -1,16 +1,17 @@
+using System.Text;
 using WebApplication4.BackgroundServices;
 using WebApplication4.Models;
 using WebApplication4.Controllers;
 
+Console.OutputEncoding = Encoding.UTF8;
+
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.Configure<SmtpCredentials>(
+builder.Services.Configure<SmtpEmailSender.SmtpCredentials>(
     builder.Configuration.GetSection("SmtpCredentials"));
-
-builder.Services.AddScoped<IEmailSender, SmtpEmailSender>();
 builder.Services.AddSingleton<ICatalog, InMemoryCatalog>();
+builder.Services.AddSingleton<IEmailSender, SmtpEmailSender>();
 builder.Services.AddHostedService<ServerStartingNotifier>();
-builder.Services.AddHostedService<ServerStatusNotifier>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

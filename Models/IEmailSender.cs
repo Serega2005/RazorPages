@@ -2,5 +2,5 @@
 
 public interface IEmailSender
 {
-    void Send(string senderName, string title, string body, string recipient);
+    void Send(string senderName, string title, string body, string recipient, CancellationToken cancellationToken);
 }

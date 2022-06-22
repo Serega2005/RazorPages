@@ -26,7 +26,7 @@ public sealed class ServerStartingNotifier : BackgroundService
     {
         int counterLimit = 0;
         int limitAttempt = 3;
-        bool successfull = false;
+        bool successfull = true;
 
         do
         {
@@ -46,11 +46,11 @@ public sealed class ServerStartingNotifier : BackgroundService
                 catch (Exception e)
                 {
                     _logger.LogError(e, "Ошибка при попытке отправить Email");
-                    successfull = true;
+                    successfull = false;
                 }
 
                 await Task.Delay(TimeSpan.FromSeconds(5));
             }
-        } while (!successfull || counterLimit < limitAttempt);
+        } while (successfull || counterLimit < limitAttempt);
     }
 }

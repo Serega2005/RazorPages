@@ -24,25 +24,33 @@ public sealed class ServerStartingNotifier : BackgroundService
 
     public async Task SendNotificationEverySecond()
     {
-        while (true)
-        {
-            try
-            {
-                var cts = new CancellationTokenSource(TimeSpan.FromSeconds(3));
-                await _emailSender.Send(
-                    "asp2022_5@rodion-m.ru",
-                    "Сервер работает",
-                    "Сервер работает",
-                    "rodion@outlook.com", 
-                    cts.Token);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Ошибка при попытке отправить Email");
-            }
+        int counterLimit = 0;
+        int limitAttempt = 3;
+        bool successfull = false;
 
-            
-            await Task.Delay(TimeSpan.FromSeconds(5));
-        }
+        do
+        {
+            counterLimit++;
+            while (true)
+            {
+                try
+                {
+                    var cts = new CancellationTokenSource(TimeSpan.FromSeconds(3));
+                    await _emailSender.Send(
+                        "asp2022pd011@rodion-m.ru",
+                        "Сервер работает",
+                        "Сервер работает",
+                        "rodion@outlook.com",
+                        cts.Token);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Ошибка при попытке отправить Email");
+                    successfull = true;
+                }
+
+                await Task.Delay(TimeSpan.FromSeconds(5));
+            }
+        } while (!successfull || counterLimit < limitAttempt);
     }
 }
